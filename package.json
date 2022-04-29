@@ -1,0 +1,25 @@
+{
+  "name": "practica-api-rest",
+  "version": "1.0.0",
+  "description": "PlaztiMovies - Práctica del Curso Práctico de Consumo de API REST con JavaScript",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SantiagoLaraE/practica-api-rest-js.git"
+  },
+  "keywords": [
+    "javascript",
+    "api",
+    "api",
+    "rest"
+  ],
+  "author": "Santiago Lara <oscarescobar773@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SantiagoLaraE/practica-api-rest-js/issues"
+  },
+  "homepage": "https://github.com/SantiagoLaraE/practica-api-rest-js#readme"
+}
