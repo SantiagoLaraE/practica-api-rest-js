@@ -1,4 +1,5 @@
 import API_KEY from "./secrets.js";
+
 const api = axios.create({
   baseURL: "https://api.themoviedb.org/3/",
   headers: {
@@ -9,7 +10,7 @@ const api = axios.create({
   },
 });
 
-async function getTrendingMoviesPreview() {
+export async function getTrendingMoviesPreview() {
   const { data } = await api("trending/movie/day");
   const movies = data.results;
 
@@ -35,9 +36,7 @@ async function getTrendingMoviesPreview() {
   trendingPreviewMoviesContainer.appendChild(fragment);
 }
 
-getTrendingMoviesPreview();
-
-async function getCategoriesPreview() {
+export async function getCategoriesPreview() {
   const { data } = await api("genre/movie/list");
   const categories = data.genres;
 
@@ -61,4 +60,4 @@ async function getCategoriesPreview() {
   });
   categoriesPreviewContainer.appendChild(fragment);
 }
-getCategoriesPreview();
+
