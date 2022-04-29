@@ -1,11 +1,16 @@
 import API_KEY from "./secrets.js";
+const api = axios.create({
+  baseURL: "https://api.themoviedb.org/3/",
+  headers: {
+    "Content-Type": "application/json;charset=utf-8",
+  },
+  params: {
+    api_key: API_KEY,
+  },
+});
 
 async function getTrendingMoviesPreview() {
-  const res = await fetch(
-    "https://api.themoviedb.org/3/trending/movie/day?api_key=" + API_KEY
-  );
-  const data = await res.json();
-
+  const { data } = await api("trending/movie/day");
   const movies = data.results;
 
   const trendingPreviewMoviesContainer = document.querySelector(
@@ -33,17 +38,13 @@ async function getTrendingMoviesPreview() {
 getTrendingMoviesPreview();
 
 async function getCategoriesPreview() {
-  const res = await fetch(
-    "https://api.themoviedb.org/3/genre/movie/list?api_key=" + API_KEY
-  );
-  const data = await res.json();
+  const { data } = await api("genre/movie/list");
+  const categories = data.genres;
 
   const categoriesPreviewContainer = document.querySelector(
     "#categoriesPreview .categoriesPreview-list"
   );
   const fragment = new DocumentFragment();
-
-  const categories = data.genres;
 
   categories.forEach((category) => {
     const categoryContainer = document.createElement("div");
@@ -54,11 +55,9 @@ async function getCategoriesPreview() {
     categoryTitle.setAttribute("id", "id" + category.id);
     categoryTitle.classList.add("category-title");
 
-
     categoryTitle.appendChild(categoryTitleText);
     categoryContainer.appendChild(categoryTitle);
     fragment.appendChild(categoryContainer);
-    console.log(category);
   });
   categoriesPreviewContainer.appendChild(fragment);
 }
