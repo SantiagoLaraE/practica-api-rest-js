@@ -1,12 +1,6 @@
-trendingBtn.addEventListener("click", () => {
-  location.hash = "#trends";
-});
-searchFormBtn.addEventListener("click", () => {
-  location.hash = "#search=";
-});
-arrowBtn.addEventListener("click", () => {
-  location.hash = "#home";
-});
+trendingBtn.addEventListener("click", () => {location.hash = "#trends"});
+searchFormBtn.addEventListener("click", () => {location.hash = "#search="});
+arrowBtn.addEventListener("click", () => {location.hash = "#home"});
 
 window.addEventListener("DOMContentLoaded", navigator, false);
 window.addEventListener("hashchange", navigator, false);
@@ -23,14 +17,16 @@ function navigator() {
   } else {
     homePage();
   }
+  window.scrollTo({top:0});
 }
+
 function homePage() {
   headerSection.classList.remove("header-container--long");
   headerSection.style.background = "";
   arrowBtn.classList.add("inactive");
   arrowBtn.classList.remove("header-arrow--white");
-  headerTitle.classList.add("inactive");
-  headerCategoryTitle.classList.remove("inactive");
+  headerTitle.classList.remove("inactive");
+  headerCategoryTitle.classList.add("inactive");
   searchForm.classList.remove("inactive");
 
   //Secciones
@@ -59,6 +55,13 @@ function categoryPage() {
 
   genericSection.classList.remove("inactive");
   movieDetailSection.classList.add("inactive");
+
+  
+  const [ , categoryData] = location.hash.split('=')
+  const [categoryIdHash, categoryNameHash] = categoryData.split('-')
+
+  headerCategoryTitle.innerHTML = categoryNameHash;
+  getMoviesByCategory(categoryIdHash);
 }
 
 function moviePage() {
@@ -106,6 +109,7 @@ function trendsPage() {
   arrowBtn.classList.remove("inactive");
   arrowBtn.classList.remove("header-arrow--white");
   headerCategoryTitle.classList.remove("inactive");
+  headerCategoryTitle.innerHTML = 'Tendencias';
   headerTitle.classList.add("inactive");
   searchForm.classList.add("inactive");
 
