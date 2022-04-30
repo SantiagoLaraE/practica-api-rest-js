@@ -1,5 +1,16 @@
-trendingBtn.addEventListener("click", () => {location.hash = "#trends"});
-searchFormBtn.addEventListener("click", () => {location.hash = "#search="});
+trendingBtn.addEventListener("click", () => { location.hash = "#trends" });
+
+searchFormBtn.addEventListener("click", () => {
+  location.hash = "#search=" + searchFormInput.value;
+});
+searchFormInput.addEventListener('keypress', (event) => {
+  
+  if(event.keyCode === 13){
+    location.hash = "#search=" + searchFormInput.value;
+    event.preventDefault();
+  }
+})
+
 arrowBtn.addEventListener("click", () => {location.hash = "#home"});
 
 window.addEventListener("DOMContentLoaded", navigator, false);
@@ -17,7 +28,9 @@ function navigator() {
   } else {
     homePage();
   }
-  window.scrollTo({top:0});
+  // window.scrollTo({top:0});
+
+  document.body.scrollTop = 0;
 }
 
 function homePage() {
@@ -60,7 +73,9 @@ function categoryPage() {
   const [ , categoryData] = location.hash.split('=')
   const [categoryIdHash, categoryNameHash] = categoryData.split('-')
 
-  headerCategoryTitle.innerHTML = categoryNameHash;
+  const categoryNameHash_fixed = categoryNameHash.replaceAll('%20', ' ');
+
+  headerCategoryTitle.innerHTML = categoryNameHash_fixed;
   getMoviesByCategory(categoryIdHash);
 }
 
@@ -89,7 +104,7 @@ function searchPage() {
   headerSection.style.background = "";
   arrowBtn.classList.remove("inactive");
   arrowBtn.classList.remove("header-arrow--white");
-  headerCategoryTitle.classList.remove("inactive");
+  headerCategoryTitle.classList.add("inactive");
   headerTitle.classList.add("inactive");
   searchForm.classList.remove("inactive");
 
@@ -99,6 +114,10 @@ function searchPage() {
 
   genericSection.classList.remove("inactive");
   movieDetailSection.classList.add("inactive");
+  //#search, 'platzi'
+  const [ , query] = location.hash.split('=');
+
+  getMoviesBySearch(query);
 }
 
 function trendsPage() {
@@ -119,4 +138,5 @@ function trendsPage() {
 
   genericSection.classList.remove("inactive");
   movieDetailSection.classList.add("inactive");
+  getTrendingMoviesPreview();
 }
