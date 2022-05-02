@@ -75,7 +75,7 @@ function categoryPage() {
   movieDetailSection.classList.add("inactive");
 
   const [, categoryData] = location.hash.split("=");
-  const [categoryIdHash, categoryNameHash] = categoryData.split("-");
+  const [categoryIdHash, categoryNameHash] = categoryData.split("&");
 
   const categoryNameHash_fixed = categoryNameHash.replaceAll("%20", " ");
 
@@ -99,6 +99,13 @@ function moviePage() {
   categoriesPreviewSection.classList.add("inactive");
   genericSection.classList.add("inactive");
   movieDetailSection.classList.remove("inactive");
+
+  const [, movieData] = location.hash.split("=");
+  const [movieId, movieName] = movieData.split("&");
+  const movieNameFixed = movieName.replaceAll('%20', ' ')
+  console.log(movieId, movieNameFixed)
+
+  getMovieById(movieId);
 }
 
 function searchPage() {

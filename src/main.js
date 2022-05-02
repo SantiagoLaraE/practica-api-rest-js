@@ -13,8 +13,11 @@ const api = axios.create({
 function createMovies(movies, section) {
   let fragment = new DocumentFragment();
   movies.forEach((movie) => {
-    const dataCategoryContainer = document.createElement("div");
-    dataCategoryContainer.classList.add("movie-container");
+    const movieContainer = document.createElement("div");
+    movieContainer.classList.add("movie-container");
+    movieContainer.addEventListener("click", () => {
+      location.hash = `#movie=${movie.id}&${movie.title}`;
+    });
 
     const imgMovie = document.createElement("img");
     imgMovie.setAttribute(
@@ -24,12 +27,9 @@ function createMovies(movies, section) {
     imgMovie.setAttribute("alt", movie.title);
     imgMovie.classList.add("movie-img");
 
-    dataCategoryContainer.appendChild(imgMovie);
-    dataCategoryContainer.addEventListener("click", () => {
-      location.hash = "#movie=" + movie.id;
-    });
+    movieContainer.appendChild(imgMovie);
 
-    fragment.appendChild(dataCategoryContainer);
+    fragment.appendChild(movieContainer);
   });
 
   section.innerHTML = "";
@@ -53,7 +53,7 @@ function createCategories(categories, section) {
 
     categoryContainer.addEventListener(
       "click",
-      () => (location.hash = `#category=${category.id}-${category.name}`)
+      () => (location.hash = `#category=${category.id}&${category.name}`)
     );
 
     fragment.appendChild(categoryContainer);
@@ -69,14 +69,14 @@ async function getTrendingMoviesPreview() {
   const movies = data.results;
 
   createMovies(movies, trendingMoviesPreviewList);
-
 }
+
 async function getTrendingMovies() {
-    const { data } = await api("trending/movie/day");
-    const movies = data.results;
-  
-    createMovies(movies, genericSection);
-  }
+  const { data } = await api("trending/movie/day");
+  const movies = data.results;
+
+  createMovies(movies, genericSection);
+}
 
 async function getCategoriesPreview() {
   const { data } = await api("genre/movie/list");
@@ -103,9 +103,38 @@ async function getMoviesBySearch(query) {
   });
   const movies = data.results;
 
-
   const fixedMovies = movies.filter((movie) => movie.poster_path != null);
 
-
   createMovies(fixedMovies, genericSection);
+}
+
+async function getMovieById(id) {
+  const { data: movie } = await api("movie/" + id);
+  
+
+  const movieBackgroundImg = `https://image.tmdb.org/t/p/w400/${movie.poster_path}`;
+
+  movieDetailTitle.textContent = movie.title;
+  movieDetailDescription.textContent = movie.overview;
+  movieDetailScore.textContent = movie.vote_average;
+
+  headerSection.style.background = `linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.35) 19.27%,
+    rgba(0, 0, 0, 0) 29.17%
+  ),
+  url(${movieBackgroundImg})`;
+
+  
+  createCategories(movie.genres, movieDetailCategoriesList);
+
+  getRelatedMoviesbyId(id);
+  
+}
+
+async function getRelatedMoviesbyId(id){
+  const { data } = await api("movie/" + id + "/recommendations");
+  const relatedMovies = data.results;
+  
+  createMovies(relatedMovies, relatedMoviesContainer);
 }
